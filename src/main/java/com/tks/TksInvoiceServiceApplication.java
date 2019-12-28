@@ -24,12 +24,6 @@ public class TksInvoiceServiceApplication extends WebConfig {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    InvoiceService invoiceService;
-
     public static void main(String[] args) {
         SpringApplication.run(TksInvoiceServiceApplication.class, args);
     }
@@ -38,8 +32,6 @@ public class TksInvoiceServiceApplication extends WebConfig {
     public CommandLineRunner initQuery(ApplicationContext applicationContext) {
         return args -> {
             productService.addDummyProductOnStartup();
-            userService.addDummyProductOnStartup();
-            invoiceService.addDummyInvloiceOnStartup();
         };
     }
 
@@ -54,7 +46,6 @@ public class TksInvoiceServiceApplication extends WebConfig {
         lci.setParamName("lang");
         return lci;
     }
-
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

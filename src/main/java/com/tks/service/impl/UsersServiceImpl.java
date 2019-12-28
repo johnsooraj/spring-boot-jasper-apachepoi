@@ -15,12 +15,6 @@ public class UsersServiceImpl implements UserService {
     @Autowired
     UsersRepository usersRepository;
 
-
-    @Override
-    public List<Users> addDummyProductOnStartup() {
-        return usersRepository.saveAll(getDummyUsers());
-    }
-
     @Override
     public Users saveUser(Users users) {
         return usersRepository.save(users);
@@ -29,13 +23,6 @@ public class UsersServiceImpl implements UserService {
     @Override
     public Optional<Users> findUserByNameAndPhone(String name, String mobile) {
         return usersRepository.findByCustomerNameAndMobile(name, mobile);
-    }
-
-    private List<Users> getDummyUsers() {
-        Set<Address> addresses = new HashSet<>();
-        addresses.add(new Address("Test1", "Test2", "686671"));
-        Users users = new Users("John", "9447599402", addresses);
-        return Arrays.asList(users);
     }
 
 
