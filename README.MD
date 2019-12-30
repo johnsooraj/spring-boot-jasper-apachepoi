@@ -10,10 +10,9 @@
 
 ###Screenshots
                
-Homepage,     
+   
 <a href="https://ibb.co/0Q82myT"><img src="https://i.ibb.co/1bhQ7G1/tks2.png" alt="tks2" border="0"></a>
 
-List Invoices,
 <a href="https://ibb.co/x3ZyLLM"><img src="https://i.ibb.co/hC0k99K/tks1.png" alt="tks1" border="0"></a>
 
 
