@@ -29,9 +29,16 @@ public class ProductController {
         return productService.getAllProduct(page != null ? page : 0, count != null ? count : 10);
     }
 
-    @PostMapping("/purchase")
-    public ResponseEntity<Invoices> makePurchase(@RequestBody Invoices invoices) {
-        Invoices invoices1 = invoiceService.makePurchaseAndGenerateInvoice(invoices);
-        return new ResponseEntity<>(invoices1, HttpStatus.OK);
+    @PostMapping(value = "/purchase")
+    public ResponseEntity<Invoices> makePurchase(@RequestBody Invoices invoices) throws Exception {
+        if (invoices.getPurchaseItemsIds().length >= 1 &&
+                invoices.getUser().getCustomerName() != null &&
+                invoices.getUser().getMobile() != null &&
+                invoices.getUser().getMobile().length() > 0 &&
+                invoices.getUser().getCustomerName().length() > 0) {
+            Invoices invoices1 = invoiceService.makePurchaseAndGenerateInvoice(invoices);
+            return new ResponseEntity<>(invoices1, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 }

@@ -12,12 +12,16 @@ import com.tks.util.FileExtenstion;
 import com.tks.util.JasperUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,6 +66,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         log.info("Invoice data inserted and Invoice document started to process");
         generateInvoiceAsyn(invoices);
         return invoices;
+    }
+
+    @Override
+    public List<Invoices> fetchAllInvoicesByPage(Integer page, Integer count) {
+        Pageable pageable = PageRequest.of(page, count, Sort.by("purchaseTime").descending());
+        List<Invoices> invoicesList = invoiceRepository.findAll(pageable).stream().collect(Collectors.toList());
+        return invoicesList;
     }
 
     @Async

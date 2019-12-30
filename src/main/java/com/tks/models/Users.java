@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -14,16 +15,22 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(
+        uniqueConstraints =
+        @UniqueConstraint(columnNames = {"customerName", "mobile"})
+)
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @NotNull
+    @Column(nullable = false)
     private String customerName;
 
-    @Column(unique = true, nullable = false)
+    @NotNull
+    @Column(nullable = false)
     private String mobile;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

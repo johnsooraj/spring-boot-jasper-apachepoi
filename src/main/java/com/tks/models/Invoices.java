@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ public class Invoices {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceSeq")
     private Long id;
 
+    @NotNull
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Users user;
 

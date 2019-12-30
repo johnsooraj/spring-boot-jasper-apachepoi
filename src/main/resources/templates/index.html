@@ -8,9 +8,7 @@
           th:href="@{/css/styles.css}"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
@@ -34,27 +32,67 @@
     <div class="leftcolumn">
         <div id="addData" class="card">
             <h2>ADD NEW DATA</h2>
-            <h5>Title description, Dec 7, 2017</h5>
-            <div class="fakeimg" style="height:200px;">Image</div>
-            <p>Some text..</p>
-            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco.</p>
+            <h5>Inventory updated, Dec 30, 2019</h5>
+            <form id="orderForm" action="/product/purchase" method="POST">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Customer Name</label>
+                    <input required type="text" class="form-control" id="customerName" name="customerName"
+                           placeholder="customer name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Customer Mobile</label>
+                    <input required type="text" class="form-control" id="mobile" name="mobile"
+                           placeholder="10 digit number">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Customer Address</label>
+                    <input required type="text" class="form-control" id="addressLine1" name="addressLine1"
+                           placeholder="12B, Hill View Appartment, Kochi">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect2">Select multiple product to purchase</label>
+                    <select required multiple class="form-control" id="purchaseItemsIds" name="purchaseItemsIds">
+                        <option value="7">Dish Washer</option>
+                        <option value="6">Brash</option>
+                        <option value="5">Sugar</option>
+                        <option value="4">Rice</option>
+                        <option value="2">Washing Soap</option>
+                        <option value="3">Maggi</option>
+                        <option value="1">Soap</option>
+                    </select>
+                </div>
+            </form>
+            <button type="button" id="makePurchase" class="btn btn-primary btn-lg">Place Order</button>
         </div>
         <div id="viewData" class="card">
             <h2>VIEW ALL DATA</h2>
             <h5>Title description, Dec 7, 2017</h5>
-            <div class="fakeimg" style="height:200px;">Image</div>
-            <p>Some text..</p>
-            <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco.</p>
+            <table id="invoiceDataTable" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Bill Amount</th>
+                    <th scope="col">Invoice</th>
+                </tr>
+                </thead>
+                <tbody id="invoiceTableRow">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <div class="footer">
-    <h2>Footer</h2>
+    <h2>Thanks For Shopping</h2>
 </div>
 
 <script>
@@ -64,11 +102,72 @@
             $("#addData").show();
             $("#viewData").hide();
         });
+
         $("#showDataForm").click(function () {
+            $("#invoiceDataTable").find("tr:gt(0)").remove();
             $("#addData").hide();
             $("#viewData").show();
+            var data = getAllInvoices();
         });
+
+        $("#makePurchase").click(function () {
+            var reqeustData = {
+                "user": {
+                    "customerName": $('#customerName').val(),
+                    "mobile": $('#mobile').val(),
+                    "addresses": [
+                        {
+                            "addressLine1": $('#addressLine1').val(),
+                            "addressLine2": null,
+                            "pincode": null
+                        }
+                    ]
+                },
+                "purchaseItemsIds": $('#purchaseItemsIds').val()
+            }
+
+            $.ajax({
+                url: '/product/purchase',
+                type: 'post',
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(reqeustData),
+                success: function (data) {
+                    $('#customerName').val(null);
+                    $('#mobile').val(null);
+                    $('#addressLine1').val(null);
+                    $('#purchaseItemsIds').val(null);
+                    alert('Oder Placed Successfully!')
+                },
+                error: function (error) {
+                    alert('Failed to save data!')
+                }
+            });
+        });
+
+        function getAllInvoices() {
+            $.ajax({
+                url: '/invoice?page=0&count=100',
+                type: 'get',
+                contentType: "application/json",
+                dataType: 'json',
+                success: function (data) {
+                    appendInvoicesToTable(data);
+                    return data;
+                },
+                error: function (error) {
+                    alert('Failed to save data!')
+                }
+            });
+        }
+
+        function appendInvoicesToTable(invoiceList) {
+            jQuery.each(invoiceList, function (i, val) {
+                $('#invoiceTableRow').append('<tr><th scope="row">' + i + '</th><td>' + val.user.customerName + '</td><td>' + val.purchaseTime + '</td><td>' + val.billAmount + '</td><td><a href="/view-invoice/' + val.id + '" target="_blank">download</a></td></tr>');
+            });
+        }
     });
 </script>
+</body>
 </body>
 </html>
