@@ -8,10 +8,10 @@
 
 #### Workflow
 
-### Sequence Diagram
-                    
-```seq
-Andrew->China: Says Hello 
-Note right of China: China thinks\nabout it 
-China-->Andrew: How are you? 
-And
+###Screenshots
+               
+Homepage,     
+![Alt text](/home/johnsooraj/Pictures/tks1.png?raw=true "Home page")
+
+List Invoices,
+![Alt text](/home/johnsooraj/Pictures/tks2.png?raw=true "Home page")
