@@ -1,5 +1,6 @@
 ## Invoice Printing after a Customer customer make purchase
 
+Note : Please edit the file path (resource.file.path) in application.properties, this is the directory for keep generated invoice file.
 #### Technologies
 1. Spring Boot with Thymeleaf view resolver.
 2. Jasper Report for Generation of invoice.
