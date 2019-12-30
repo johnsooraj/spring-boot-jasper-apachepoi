@@ -12,6 +12,7 @@ import com.tks.util.FileExtenstion;
 import com.tks.util.JasperUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +27,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
+
+    @Value("${resource.jasper.template.path}")
+    private String jasperTemplatePath;
 
     @Autowired
     InvoiceRepository invoiceRepository;
@@ -77,7 +81,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Async
     public void generateInvoiceAsyn(Invoices invoices) {
-        String filePath = jasperUtility.generateInvoice(invoices, "classpath:templates/jasper-templates/invoice1.jrxml", FileExtenstion.PDF);
+        String filePath = jasperUtility.generateInvoice(invoices, "classpath:" + jasperTemplatePath, FileExtenstion.PDF);
         updateInvoiceFilePath(invoices.getId(), filePath);
         log.info("Updated Invoice table after generating output file : {}", filePath);
     }
