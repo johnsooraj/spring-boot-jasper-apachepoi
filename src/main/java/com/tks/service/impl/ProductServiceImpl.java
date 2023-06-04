@@ -22,12 +22,6 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
 
-    @Autowired
-    InvoiceService invoiceService;
-
-    @Autowired
-    JasperUtility jasperUtility;
-
     @Override
     public List<Product> getAllProduct(Integer page, Integer count) {
         Pageable pageable = PageRequest.of(page, count, Sort.by("createTime").descending());

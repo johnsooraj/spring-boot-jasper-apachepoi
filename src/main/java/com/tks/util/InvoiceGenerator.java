@@ -68,11 +68,9 @@ public abstract class InvoiceGenerator {
     }
 
     public final String fileNameGenerator(Long invoiceId, FileExtenstion fileExtenstion) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(invoiceId);
-        stringBuffer.append("_");
-        stringBuffer.append(LocalDateTime.now());
-        stringBuffer.append(fileExtenstion.extenstion);
-        return stringBuffer.toString();
+        return invoiceId +
+                "_" +
+                System.currentTimeMillis() +
+                fileExtenstion.extenstion;
     }
 }
